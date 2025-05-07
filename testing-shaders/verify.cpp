@@ -5,6 +5,7 @@ extern "C"
 #include <iostream>
 #include <sstream>
 #include <filesystem>
+#include <functional>
 #include "image-compare.h"
 
 std::string GenerateVerifierFileName(const std::string& input) {
@@ -33,7 +34,7 @@ void RemoveFile(const std::string& path_name) {
   std::filesystem::remove(path_name);
 }
 
-void VerifyImages(const std::string& test_case_name)
+void VerifyImages(const std::string& test_case_name, std::function<void()> on_failure)
 {
   auto saved_file = GenerateVerifierFileName(test_case_name);
   auto new_file = saved_file + "_new";
@@ -48,10 +49,7 @@ void VerifyImages(const std::string& test_case_name)
 
   TakeScreenshot(new_file_full.c_str());
 
-  if (AreImagesDifferent(saved_file_full, new_file_full))
-  {
-    throw new std::domain_error("Images are different");
-  }
+  if (AreImagesDifferent(saved_file_full, new_file_full)) on_failure();
 
   RemoveFile(new_file_full);
 }
