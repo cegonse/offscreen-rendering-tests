@@ -1,0 +1,74 @@
+diff --git a/src/external/glfw/src/platform.c b/src/external/glfw/src/platform.c
+index c4b0a36e..adcfa8a9 100644
+--- a/src/external/glfw/src/platform.c
++++ b/src/external/glfw/src/platform.c
+@@ -53,9 +53,11 @@ static const struct
+ #endif
+ #if defined(_GLFW_WAYLAND)
+     { GLFW_PLATFORM_WAYLAND, _glfwConnectWayland },
++    { GLFW_PLATFORM_NULL, _glfwConnectNull },
+ #endif
+ #if defined(_GLFW_X11)
+     { GLFW_PLATFORM_X11, _glfwConnectX11 },
++    { GLFW_PLATFORM_NULL, _glfwConnectNull },
+ #endif
+ };
+ 
+@@ -201,4 +203,3 @@ GLFWAPI const char* glfwGetVersionString(void)
+ #endif
+         ;
+ }
+-
+diff --git a/src/platforms/rcore_desktop_glfw.c b/src/platforms/rcore_desktop_glfw.c
+index a08033a9..fb50a8fe 100644
+--- a/src/platforms/rcore_desktop_glfw.c
++++ b/src/platforms/rcore_desktop_glfw.c
+@@ -1330,6 +1330,13 @@ int InitPlatform(void)
+ #if defined(__APPLE__)
+     glfwInitHint(GLFW_COCOA_CHDIR_RESOURCES, GLFW_FALSE);
+ #endif
++
++
++    if ((CORE.Window.flags & FLAG_OFFSCREEN_MODE) > 0) {
++        TRACELOG(LOG_INFO, "Using offscreen mode");
++        glfwInitHint(GLFW_PLATFORM, GLFW_PLATFORM_NULL);
++    }
++
+     // Initialize GLFW internal global state
+     int result = glfwInit();
+     if (result == GLFW_FALSE) { TRACELOG(LOG_WARNING, "GLFW: Failed to initialize GLFW"); return -1; }
+@@ -1450,6 +1457,11 @@ int InitPlatform(void)
+         glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
+     }
+ 
++    if ((CORE.Window.flags & FLAG_OFFSCREEN_MODE) > 0) {
++        TRACELOG(LOG_INFO, "Enabling OSMESA context API");
++        glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_OSMESA_CONTEXT_API);
++    }
++
+     // NOTE: GLFW 3.4+ defers initialization of the Joystick subsystem on the first call to any Joystick related functions.
+     // Forcing this initialization here avoids doing it on PollInputEvents() called by EndDrawing() after first frame has been just drawn.
+     // The initialization will still happen and possible delays still occur, but before the window is shown, which is a nicer experience.
+@@ -1759,7 +1771,7 @@ static void WindowSizeCallback(GLFWwindow *window, int width, int height)
+         width = (int)(width/GetWindowScaleDPI().x);
+         height = (int)(height/GetWindowScaleDPI().y);
+     }
+-    
++
+     // Set render size
+     CORE.Window.render.width = width;
+     CORE.Window.render.height = height;
+diff --git a/src/raylib.h b/src/raylib.h
+index fc949a02..e1e1abed 100644
+--- a/src/raylib.h
++++ b/src/raylib.h
+@@ -554,7 +554,8 @@ typedef enum {
+     FLAG_WINDOW_MOUSE_PASSTHROUGH = 0x00004000, // Set to support mouse passthrough, only supported when FLAG_WINDOW_UNDECORATED
+     FLAG_BORDERLESS_WINDOWED_MODE = 0x00008000, // Set to run program in borderless windowed mode
+     FLAG_MSAA_4X_HINT       = 0x00000020,   // Set to try enabling MSAA 4X
+-    FLAG_INTERLACED_HINT    = 0x00010000    // Set to try enabling interlaced video format (for V3D)
++    FLAG_INTERLACED_HINT    = 0x00010000,   // Set to try enabling interlaced video format (for V3D)
++    FLAG_OFFSCREEN_MODE     = 0x00020000    // Set to try enabling offscreen rendering mode
+ } ConfigFlags;
+ 
+ // Trace log level
