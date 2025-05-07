@@ -1,0 +1,13 @@
+name: Tests
+
+on: [push]
+
+jobs:
+  shader-tests:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Install dependencies
+      run: apt install -y libmagickwand-dev libosmesa-dev
+    - name: Run tests
+      run: make
