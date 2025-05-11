@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
   auto z = std::stof(argv[3]);
 
   RenderWithShader("common/bloom.fs", { x, y, z });
-  TakeScreenshot("api-out.png");
+  TakeScreenshot("build/api-out.png");
 
   CleanUp();
   return 0;

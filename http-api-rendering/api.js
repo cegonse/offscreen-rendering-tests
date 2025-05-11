@@ -50,7 +50,7 @@ const server = http.createServer((req, res) => {
   const z = searchParams.get("z") || 3;
 
   execSync(`build/http-api-rendering ${x} ${y} ${z}`);
-  const image = fs.readFileSync("api-out.png");
+  const image = fs.readFileSync("build/api-out.png");
   const data = image.toString("base64");
 
   res.writeHead(200, { "Content-Type": "text/html" });
