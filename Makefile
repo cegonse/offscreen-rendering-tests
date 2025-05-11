@@ -1,4 +1,18 @@
-all: testing-shaders
+all: testing-shaders http-api-rendering
+
+clean:
+	@rm -rf build
+
+http-api-rendering:
+	@mkdir -p build
+	@g++ \
+		-Ilib \
+		-Icommon \
+		-Llib \
+		./common/render.cpp \
+		./http-api-rendering/main.cpp \
+		-lraylib \
+		-o ./build/http-api-rendering
 
 testing-shaders:
 	@mkdir -p build
@@ -17,4 +31,4 @@ testing-shaders:
 		-o ./build/shader-test
 	@./build/shader-test
 
-.PHONY: all testing-shaders
+.PHONY: all testing-shaders http-api-rendering clean
