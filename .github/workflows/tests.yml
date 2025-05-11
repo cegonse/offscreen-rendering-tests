@@ -8,6 +8,6 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - name: Install dependencies
-      run: apt install -y libmagickwand-dev libosmesa-dev
+      run: sudo apt-get install -y libmagickwand-dev libosmesa-dev
     - name: Run tests
       run: make

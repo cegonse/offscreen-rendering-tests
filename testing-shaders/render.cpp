@@ -49,7 +49,7 @@ static Shader shader;
 
 void RenderWithShader(const std::string& path)
 {
-  SetTraceLogCallback(NullLog);
+  //SetTraceLogCallback(NullLog);
   SetConfigFlags(FLAG_OFFSCREEN_MODE);
   InitWindow(800, 600, "");
 
