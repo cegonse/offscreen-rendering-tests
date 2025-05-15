@@ -14,6 +14,16 @@ integration-testing:
 		-lraylib \
 		-o ./build/game
 
+	@g++ \
+		-Ilib \
+		-Llib \
+		./integration-testing/game.cpp \
+		./integration-testing/platform-test.cpp \
+		./integration-testing/game.test.cpp \
+		-lraylib \
+		-o ./build/game-test
+	@./build/game-test
+
 http-api-rendering:
 	@mkdir -p build
 	@g++ \

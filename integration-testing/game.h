@@ -6,7 +6,7 @@ class GameState;
 class Game
 {
   public:
-    Game();
+    Game(bool headless_mode);
     ~Game();
     void DoFrame();
     bool ShouldRun();

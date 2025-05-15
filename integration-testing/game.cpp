@@ -50,10 +50,12 @@ struct GameState {
 
 void NullLog(int logLevel, const char *text, va_list args) {}
 
-Game::Game()
+Game::Game(bool headless_mode)
 {
+  if (headless_mode) SetConfigFlags(FLAG_OFFSCREEN_MODE);
   SetTraceLogCallback(NullLog);
   InitWindow(800, 600, "Game");
+
   SetTargetFPS(GetMonitorRefreshRate(GetCurrentMonitor()));
 
   this->state.reset(new GameState);
