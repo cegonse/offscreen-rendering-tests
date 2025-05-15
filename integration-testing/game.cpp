@@ -1,6 +1,7 @@
 #include "game.h"
 #include "platform.h"
 #include <vector>
+#include <string>
 #include <cstdlib>
 #include <raylib.h>
 
@@ -10,8 +11,9 @@ struct GameState {
   float player_y_speed;
   std::vector<Rectangle> boxes;
   bool dead;
+  int score;
 
-  GameState() : dead(false) {
+  GameState() : dead(false), score(0) {
     camera.target = { 0, 0 };
     camera.offset = { 0, 0 };
     camera.rotation = 0;
@@ -27,6 +29,7 @@ struct GameState {
   }
 
   private:
+
   void GenerateBoxes()
   {
     auto offset = 500.f;
@@ -56,7 +59,8 @@ Game::Game(bool headless_mode)
   SetTraceLogCallback(NullLog);
   InitWindow(800, 600, "Game");
 
-  SetTargetFPS(GetMonitorRefreshRate(GetCurrentMonitor()));
+  auto target_fps = headless_mode ? 10 : GetMonitorRefreshRate(GetCurrentMonitor());
+  SetTargetFPS(target_fps);
 
   this->state.reset(new GameState);
 }
@@ -85,11 +89,18 @@ static void updateState(GameState *state)
     if (collision) state->dead = true;
   }
 
-  if (state->player.y > 650 || state->player.x < -50) state->dead = true;
+  auto player_out_of_vertical_bounds = state->player.y > 650 || state->player.x < -50;
+  if (player_out_of_vertical_bounds) state->dead = true;
+
+  auto player_surpassed_first_column = state->player.x > state->boxes[0].x;
+  auto player_surpassed_column = (int)state->player.x % (int)(state->boxes[0].x * 0.5) == 0;
+  if (player_surpassed_first_column && player_surpassed_column) state->score++;
 }
 
 static void render(GameState *state)
 {
+  auto score_text = std::to_string(state->score);
+
   BeginDrawing();
   ClearBackground(BLACK);
   BeginMode2D(state->camera);
@@ -107,6 +118,7 @@ static void render(GameState *state)
 
   EndMode2D();
   DrawFPS(10, 10);
+  DrawText(score_text.c_str(), 390, 10, 60, WHITE);
   EndDrawing();
 }
 
