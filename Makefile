@@ -9,6 +9,7 @@ integration-testing:
 		-Ilib \
 		-Llib \
 		./integration-testing/game.cpp \
+		./integration-testing/platform-pc.cpp \
 		./integration-testing/main.cpp \
 		-lraylib \
 		-o ./build/game

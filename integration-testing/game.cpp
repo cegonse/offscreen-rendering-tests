@@ -1,4 +1,5 @@
 #include "game.h"
+#include "platform.h"
 #include <vector>
 #include <cstdlib>
 #include <raylib.h>
@@ -34,7 +35,7 @@ struct GameState {
       first.height = 300;
       first.width = 48;
       first.x = offset + i * 250;
-      first.y = 140 * ((double)rand() / (double)RAND_MAX) - 180;
+      first.y = 140 * Platform::Random() - 180;
 
       second.height = first.height;
       second.width = first.width;
@@ -74,7 +75,7 @@ static void updateState(GameState *state)
   state->player.x += speed;
   state->player.y += state->player_y_speed;
 
-  if (IsKeyPressed(KEY_SPACE)) state->player_y_speed = -5.f;
+  if (Platform::JumpKeyPressed()) state->player_y_speed = -5.f;
 
   for (auto box : state->boxes)
   {
