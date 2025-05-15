@@ -8,7 +8,7 @@ describe("JumpingGame", []() {
     auto headless_mode = true;
     Game game(headless_mode);
 
-    for (int i=0; i < 60; ++i) {
+    for (int i=0; i < 160; ++i) {
       game.DoFrame();
 
       if (i % 9 == 0) Platform::ForceJumpKey();
