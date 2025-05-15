@@ -34,7 +34,7 @@ struct GameState {
       first.height = 300;
       first.width = 48;
       first.x = offset + i * 250;
-      first.y = 130 * ((double)rand() / (double)RAND_MAX) - 180;
+      first.y = 140 * ((double)rand() / (double)RAND_MAX) - 180;
 
       second.height = first.height;
       second.width = first.width;
@@ -63,29 +63,8 @@ Game::~Game()
   CloseWindow();
 }
 
-void Game::DoFrame()
+static void updateState(GameState *state)
 {
-  auto state = this->state.get();
-  BeginDrawing();
-  ClearBackground(BLACK);
-  BeginMode2D(state->camera);
-
-  bool swap = false;
-  for (auto [x, y, width, height] : state->boxes)
-  {
-    auto startColor = swap ? RED : BLACK;
-    auto endColor = swap ? BLACK : RED;
-    DrawRectangleGradientV(x, y, width, height, startColor, endColor);
-    swap = !swap;
-  }
-
-  DrawRectangleRounded(state->player, 0.25, 32, PINK);
-
-  EndMode2D();
-
-  DrawFPS(10, 10);
-  EndDrawing();
-
   if (state->dead) return;
 
   auto speed = 100.f * GetFrameTime();
@@ -104,6 +83,36 @@ void Game::DoFrame()
   }
 
   if (state->player.y > 650 || state->player.x < -50) state->dead = true;
+}
+
+static void render(GameState *state)
+{
+  BeginDrawing();
+  ClearBackground(BLACK);
+  BeginMode2D(state->camera);
+
+  bool swap = false;
+  for (auto [x, y, width, height] : state->boxes)
+  {
+    auto startColor = swap ? RED : BLACK;
+    auto endColor = swap ? BLACK : RED;
+    DrawRectangleGradientV(x, y, width, height, startColor, endColor);
+    swap = !swap;
+  }
+
+  DrawRectangleRounded(state->player, 0.25, 32, PINK);
+
+  EndMode2D();
+  DrawFPS(10, 10);
+  EndDrawing();
+}
+
+void Game::DoFrame()
+{
+  auto state = this->state.get();
+
+  render(state);
+  updateState(state);
 }
 
 bool Game::ShouldRun()
