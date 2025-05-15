@@ -91,7 +91,8 @@ static void updateState(GameState *state)
 
   if (player_out_of_vertical_bounds || collision) state->dead = true;
 
-  if (state->player.x > state->boxes[state->score * 2].x) state->score++;
+  auto distance_target = state->boxes[state->score * 2].x;
+  if (state->player.x > distance_target) state->score++;
 }
 
 static void render(GameState *state)
