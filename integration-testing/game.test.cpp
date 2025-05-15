@@ -1,4 +1,5 @@
 #include <cest>
+#include <raylib.h>
 #include "game.h"
 
 describe("JumpingGame", []() {
@@ -6,6 +7,13 @@ describe("JumpingGame", []() {
     auto headless_mode = true;
     Game game(headless_mode);
 
-    game.DoFrame();
+    for (int i=0; i < 60; ++i) {
+      game.DoFrame();
+
+      if (i % 5 == 0) {
+        auto filename = "build/test_" + std::to_string(i) + ".png";
+        TakeScreenshot(filename.c_str());
+      }
+    }
   });
 });
