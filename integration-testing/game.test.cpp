@@ -1,6 +1,7 @@
 #include <cest>
 #include <raylib.h>
 #include "game.h"
+#include "platform-test.h"
 
 describe("JumpingGame", []() {
   it("builds up to 5 points after traversing 5 columns", []() {
@@ -10,7 +11,9 @@ describe("JumpingGame", []() {
     for (int i=0; i < 60; ++i) {
       game.DoFrame();
 
-      if (i % 5 == 0) {
+      if (i % 9 == 0) Platform::ForceJumpKey();
+
+      if (i % 10 == 0) {
         auto filename = "build/test_" + std::to_string(i) + ".png";
         TakeScreenshot(filename.c_str());
       }

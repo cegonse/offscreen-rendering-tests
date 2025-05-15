@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <cstdlib>
+#include <cmath>
 #include <raylib.h>
 
 struct GameState {
@@ -83,18 +84,14 @@ static void updateState(GameState *state)
 
   if (Platform::JumpKeyPressed()) state->player_y_speed = -5.f;
 
-  for (auto box : state->boxes)
-  {
-    auto collision = CheckCollisionRecs(state->player, box);
-    if (collision) state->dead = true;
-  }
-
   auto player_out_of_vertical_bounds = state->player.y > 650 || state->player.x < -50;
-  if (player_out_of_vertical_bounds) state->dead = true;
+  auto collision = false;
+  for (auto box : state->boxes)
+    collision |= CheckCollisionRecs(state->player, box);
 
-  auto player_surpassed_first_column = state->player.x > state->boxes[0].x;
-  auto player_surpassed_column = (int)state->player.x % (int)(state->boxes[0].x * 0.5) == 0;
-  if (player_surpassed_first_column && player_surpassed_column) state->score++;
+  if (player_out_of_vertical_bounds || collision) state->dead = true;
+
+  if (state->player.x > state->boxes[state->score * 2].x) state->score++;
 }
 
 static void render(GameState *state)
