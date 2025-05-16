@@ -8,9 +8,10 @@ describe("JumpingGame", []() {
     auto headless_mode = true;
     Game game(headless_mode);
 
-    onEveryNthFrame(9, [](int _) { Platform::ForceJumpKey(); });
+    onEveryNthFrame(6, [](int _) { Platform::ForceJumpKey(); });
     onEveryNthFrame(10, [](int frame) { Screenshot(frame); });
-
     runFrames(140, [&]() { game.DoFrame(); });
+
+    expect(game.Score()).toBeGreaterThan(5);
   });
 });

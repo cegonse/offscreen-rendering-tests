@@ -13,8 +13,10 @@ struct GameState {
   std::vector<Rectangle> boxes;
   bool dead;
   int score;
+  int frame_index;
+  bool headless;
 
-  GameState() : dead(false), score(0) {
+  GameState(bool headless_mode) : dead(false), score(0), frame_index(0), headless(headless_mode) {
     camera.target = { 0, 0 };
     camera.offset = { 0, 0 };
     camera.rotation = 0;
@@ -63,7 +65,12 @@ Game::Game(bool headless_mode)
   auto target_fps = headless_mode ? 10 : GetMonitorRefreshRate(GetCurrentMonitor());
   SetTargetFPS(target_fps);
 
-  this->state.reset(new GameState);
+  this->state.reset(new GameState(headless_mode));
+}
+
+float Game::Score()
+{
+  return state->score;
 }
 
 Game::~Game()
@@ -123,8 +130,13 @@ static void render(GameState *state)
 void Game::DoFrame()
 {
   auto state = this->state.get();
+  state->frame_index++;
 
-  render(state);
+  if (state->headless && state->frame_index % 10 == 0)
+  {
+    render(state);
+  }
+
   updateState(state);
 }
 

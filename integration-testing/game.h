@@ -10,6 +10,7 @@ class Game
     ~Game();
     void DoFrame();
     bool ShouldRun();
+    float Score();
 
   private:
     std::unique_ptr<GameState> state;
