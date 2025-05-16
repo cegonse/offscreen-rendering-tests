@@ -20,6 +20,7 @@ integration-testing:
 		./integration-testing/game.cpp \
 		./integration-testing/platform-test.cpp \
 		./integration-testing/game.test.cpp \
+		-g \
 		-lraylib \
 		-o ./build/game-test
 	@./build/game-test
