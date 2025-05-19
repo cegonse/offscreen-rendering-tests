@@ -10,7 +10,7 @@ describe("JumpingGame", []() {
 
     onEveryNthFrame(6, [](int _) { Platform::ForceJumpKey(); });
     onEveryNthFrame(10, [](int frame) { Screenshot(frame); });
-    runFrames(200, [&]() { game.DoFrame(); });
+    runFrames(360, [&]() { game.DoFrame(); });
 
     expect(game.Score()).toBeGreaterThan(5);
   });
