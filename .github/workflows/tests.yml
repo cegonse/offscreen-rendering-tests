@@ -5,6 +5,8 @@ on: [push]
 jobs:
   shader-tests:
     runs-on: ubuntu-latest
+    env:
+      IMGUR_TOKEN: ${{ secrets.IMGUR_TOKEN }}
     steps:
     - uses: actions/checkout@master
     - name: Install dependencies

@@ -5,6 +5,7 @@ extern "C"
 #include <iostream>
 #include <sstream>
 #include <filesystem>
+#include <fstream>
 #include <functional>
 #include "image-compare.h"
 
@@ -34,7 +35,16 @@ void RemoveFile(const std::string& path_name) {
   std::filesystem::remove(path_name);
 }
 
-void VerifyImages(const std::string& test_case_name, std::function<void()> on_failure)
+std::string ReadFile(const std::string& path_name) {
+  std::ifstream file(path_name);
+  std::stringstream buffer;
+
+  buffer << file.rdbuf();
+
+  return buffer.str();
+}
+
+void VerifyImages(const std::string& test_case_name, std::function<void(std::string)> on_failure)
 {
   auto saved_file = GenerateVerifierFileName(test_case_name);
   auto new_file = saved_file + "_new";
@@ -49,7 +59,13 @@ void VerifyImages(const std::string& test_case_name, std::function<void()> on_fa
 
   TakeScreenshot(new_file_full.c_str());
 
-  if (AreImagesDifferent(saved_file_full, new_file_full)) on_failure();
+  if (AreImagesDifferent(saved_file_full, new_file_full))
+  {
+    system("./testing-shaders/upload-imgur.sh");
+    auto url = ReadFile("url");
+    RemoveFile("url");
+    on_failure(url);
+  }
 
   RemoveFile(new_file_full);
 }

@@ -4,7 +4,8 @@ Testing offscreen rendering with Raylib and libosmesa
 ## Requirements
 
 - C++ compiler with C++17 support or greater.
-- `libosmesa-dev` and `libmagickwand-dev`.
+- `libosmesa-dev`
+- `libmagickwand-dev`
 
 ## Building and running
 
