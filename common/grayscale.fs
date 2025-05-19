@@ -22,5 +22,5 @@ void main()
     float gray = dot(texelColor.rgb, vec3(0.299, 0.587, 0.114));
 
     // Calculate final fragment color
-    finalColor = vec4(gray, gray, gray, texelColor.a);
+    finalColor = vec4(1.0f, gray, gray, texelColor.a);
 }
