@@ -10,9 +10,9 @@
 
 constexpr int NUM_FRAMES_TO_RENDER = 70;
 
-static inline std::function<void(std::string, int)> OnFailure(const char *file, int line) {
-  return [=](std::string url, int frame) {
-    throw cest::AssertionError(file, line, "Rendered images do not match after frame " + std::to_string(frame) + ". Uploaded video to " + url);
+static inline std::function<void(std::string, double, int)> OnFailure(const char *file, int line) {
+  return [=](std::string url, double distortion, int frame) {
+    throw cest::AssertionError(file, line, "Rendered images do not match. " + std::to_string(distortion*100.0)  + "% distortion after frame " + std::to_string(frame) + ". Uploaded video to " + url);
   };
 }
 
@@ -34,7 +34,7 @@ std::string FrameFilename(int frame)
   return "integration-testing/snapshots/" + std::to_string(frame) + ".png";
 }
 
-void _VerifyFramesSnapshot(std::function<void(std::string, int)> on_failure)
+void _VerifyFramesSnapshot(std::function<void(std::string, double, int)> on_failure)
 {
   for (int i=0; i<NUM_FRAMES_TO_RENDER; i+=4) {
     if (!FileExists(NewFrameFilename(i))) continue;
@@ -44,8 +44,7 @@ void _VerifyFramesSnapshot(std::function<void(std::string, int)> on_failure)
 
     if (difference && distortion > 0.1)
     {
-      std::cout << "distortion: " << distortion << std::endl;
-      on_failure("url", i);
+      on_failure("url", distortion, i);
     }
   }
 
