@@ -45,9 +45,9 @@ testing-shaders:
 		-I/usr/include/x86_64-linux-gnu/ImageMagick-6 \
 		-Llib \
 		./common/render.cpp \
+		./common/image-compare.cpp \
 		./testing-shaders/shader.test.cpp \
 		./testing-shaders/verify.cpp \
-		./testing-shaders/image-compare.cpp \
 		-lraylib \
 		`pkg-config --cflags --libs MagickWand` \
 		-o ./build/shader-test
