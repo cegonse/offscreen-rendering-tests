@@ -30,6 +30,6 @@ static inline void onEveryNthFrame(int frame, std::function<void(int)> action)
 
 void Screenshot(int frame)
 {
-  auto filename = "build/test_" + std::to_string(frame) + ".png";
+  auto filename = "integration-testing/snapshots/" + std::to_string(frame) + ".png";
   TakeScreenshot(filename.c_str());
 }

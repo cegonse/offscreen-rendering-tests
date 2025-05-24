@@ -22,6 +22,7 @@ integration-testing:
 		./integration-testing/game.test.cpp \
 		-g \
 		-lraylib \
+		`pkg-config --cflags --libs MagickWand` \
 		-o ./build/game-test
 	@./build/game-test
 
