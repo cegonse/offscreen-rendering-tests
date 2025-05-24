@@ -132,7 +132,7 @@ void Game::DoFrame()
   auto state = this->state.get();
   state->frame_index++;
 
-  if (state->headless && state->frame_index % 10 == 0)
+  if (state->headless && state->frame_index % 4 == 0)
   {
     render(state);
   }
