@@ -59,7 +59,8 @@ void VerifyImages(const std::string& test_case_name, std::function<void(std::str
 
   TakeScreenshot(new_file_full.c_str());
 
-  if (AreImagesDifferent(saved_file_full, new_file_full))
+  double distortion = 0.0;
+  if (AreImagesDifferent(saved_file_full, new_file_full, &distortion))
   {
     system("./testing-shaders/upload-imgur.sh");
     auto url = ReadFile("url");

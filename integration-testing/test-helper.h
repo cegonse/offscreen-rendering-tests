@@ -3,6 +3,57 @@
 #include <map>
 #include <string>
 #include <raylib.h>
+#include <filesystem>
+#include <image-compare.h>
+
+#define VerifyFramesSnapshot()  _VerifyFramesSnapshot(OnFailure(__FILE__, __LINE__ - 1))
+
+constexpr int NUM_FRAMES_TO_RENDER = 70;
+
+static inline std::function<void(std::string, int)> OnFailure(const char *file, int line) {
+  return [=](std::string url, int frame) {
+    throw cest::AssertionError(file, line, "Rendered images do not match after frame " + std::to_string(frame) + ". Uploaded video to " + url);
+  };
+}
+
+bool FileExists(const std::string& path_name) {
+  return std::filesystem::exists(path_name) && std::filesystem::is_regular_file(path_name);
+}
+
+void RemoveFile(const std::string& path_name) {
+  std::filesystem::remove(path_name);
+}
+
+std::string NewFrameFilename(int frame)
+{
+  return "integration-testing/snapshots/new_" + std::to_string(frame) + ".png";
+}
+
+std::string FrameFilename(int frame)
+{
+  return "integration-testing/snapshots/" + std::to_string(frame) + ".png";
+}
+
+void _VerifyFramesSnapshot(std::function<void(std::string, int)> on_failure)
+{
+  for (int i=0; i<NUM_FRAMES_TO_RENDER; i+=4) {
+    if (!FileExists(NewFrameFilename(i))) continue;
+
+    double distortion = 0.0;
+    auto difference = AreImagesDifferent(FrameFilename(i), NewFrameFilename(i), &distortion);
+
+    if (difference && distortion > 0.1)
+    {
+      std::cout << "distortion: " << distortion << std::endl;
+      on_failure("url", i);
+    }
+  }
+
+  for (int i=0; i<NUM_FRAMES_TO_RENDER; i+=4) {
+    if (!FileExists(NewFrameFilename(i))) continue;
+    RemoveFile(NewFrameFilename(i));
+  }
+}
 
 struct FrameAction
 {
@@ -30,6 +81,8 @@ static inline void onEveryNthFrame(int frame, std::function<void(int)> action)
 
 void Screenshot(int frame)
 {
-  auto filename = "integration-testing/snapshots/" + std::to_string(frame) + ".png";
+  auto filename = FrameFilename(frame);
+  if (FileExists(filename)) filename = NewFrameFilename(frame);
+
   TakeScreenshot(filename.c_str());
 }

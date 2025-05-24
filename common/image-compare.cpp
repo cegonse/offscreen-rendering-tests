@@ -4,7 +4,7 @@ extern "C"
   #include <wand/MagickWand.h>
 }
 
-bool AreImagesDifferent(const std::string& path1, const std::string& path2) {
+bool AreImagesDifferent(const std::string& path1, const std::string& path2, double *distortion) {
   MagickWand *img1 = NULL, *img2 = NULL, *diff = NULL;
 
   MagickWandGenesis();
@@ -28,13 +28,13 @@ bool AreImagesDifferent(const std::string& path1, const std::string& path2) {
       return true;
   }
 
-  double distortion = 0.0;
-  if (MagickCompareImages(img1, img2, AbsoluteErrorMetric, &distortion) == nullptr) {
+  *distortion = 0.0;
+  if (MagickCompareImages(img1, img2, RootMeanSquaredErrorMetric, distortion) == nullptr) {
     if (img1) DestroyMagickWand(img1);
     if (img2) DestroyMagickWand(img2);
     MagickWandTerminus();
     return true;
   }
 
-  return distortion != 0.0;
+  return *distortion != 0.0;
 }

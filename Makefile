@@ -16,10 +16,12 @@ integration-testing:
 
 	@g++ \
 		-Ilib \
+		-Icommon \
 		-Llib \
 		./integration-testing/game.cpp \
 		./integration-testing/platform-test.cpp \
 		./integration-testing/game.test.cpp \
+		./common/image-compare.cpp \
 		-g \
 		-lraylib \
 		`pkg-config --cflags --libs MagickWand` \
