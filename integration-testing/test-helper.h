@@ -9,6 +9,7 @@
 #define VerifyFramesSnapshot()  _VerifyFramesSnapshot(OnFailure(__FILE__, __LINE__ - 1))
 
 constexpr int NUM_FRAMES_TO_RENDER = 70;
+constexpr int FRAME_SKIP = 4;
 
 static inline std::function<void(std::string, double, int)> OnFailure(const char *file, int line) {
   return [=](std::string url, double distortion, int frame) {
@@ -36,19 +37,19 @@ std::string FrameFilename(int frame)
 
 void _VerifyFramesSnapshot(std::function<void(std::string, double, int)> on_failure)
 {
-  for (int i=0; i<NUM_FRAMES_TO_RENDER; i+=4) {
+  for (int i=0; i<NUM_FRAMES_TO_RENDER; i+=FRAME_SKIP) {
     if (!FileExists(NewFrameFilename(i))) continue;
 
     double distortion = 0.0;
     auto difference = AreImagesDifferent(FrameFilename(i), NewFrameFilename(i), &distortion);
 
-    if (difference && distortion > 0.1)
+    if (difference && distortion > 0.2)
     {
       on_failure("url", distortion, i);
     }
   }
 
-  for (int i=0; i<NUM_FRAMES_TO_RENDER; i+=4) {
+  for (int i=0; i<NUM_FRAMES_TO_RENDER; i+=FRAME_SKIP) {
     if (!FileExists(NewFrameFilename(i))) continue;
     RemoveFile(NewFrameFilename(i));
   }

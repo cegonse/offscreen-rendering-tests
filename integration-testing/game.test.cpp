@@ -9,7 +9,7 @@ describe("JumpingGame", []() {
     Game game(headless_mode);
 
     onEveryNthFrame(6, [](int _) { Platform::ForceJumpKey(); });
-    onEveryNthFrame(4, [](int frame) { Screenshot(frame); });
+    onEveryNthFrame(FRAME_SKIP, [](int frame) { Screenshot(frame); });
     runFrames(NUM_FRAMES_TO_RENDER, [&]() { game.DoFrame(); });
 
     expect(game.Score()).toBeGreaterThan(2);
