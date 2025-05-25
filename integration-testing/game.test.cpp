@@ -12,7 +12,8 @@ describe("JumpingGame", []() {
     onEveryNthFrame(FRAME_SKIP, [](int frame) { Screenshot(frame); });
     runFrames(NUM_FRAMES_TO_RENDER, [&]() { game.DoFrame(); });
 
-    expect(game.Score()).toBeGreaterThan(2);
-    VerifyFramesSnapshot();
+
+    auto assertion = [&]() { expect(game.Score()).toBeGreaterThan(2); };
+    Verify(assertion);
   });
 });
