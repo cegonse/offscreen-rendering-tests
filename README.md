@@ -6,6 +6,9 @@ Testing offscreen rendering with Raylib and libosmesa
 - C++ compiler with C++17 support or greater.
 - `libosmesa-dev`
 - `libmagickwand-dev`
+- `ffmpeg` (CLI tool)
+- `curl` (CLI tool)
+- `imagemagick` (CLI tool)
 
 ## Building and running
 
