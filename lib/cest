@@ -916,7 +916,7 @@ namespace cest
       if ((actual < expected) ^ negated)
       {
         std::stringstream message;
-        message << "Expected " << expected << " to be greather than" << actual;
+        message << "Expected " << expected << " to be greater than " << actual;
         throw AssertionError(assertion_file, assertion_line, message.str());
       }
     }
@@ -987,7 +987,7 @@ namespace cest
       if ((actual < expected) ^ negated)
       {
         std::stringstream message;
-        message << "Expected " << expected << " to be greather than" << actual;
+        message << "Expected " << expected << " to be greater than " << actual;
         throw AssertionError(assertion_file, assertion_line, message.str());
       }
     }
