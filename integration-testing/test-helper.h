@@ -5,6 +5,7 @@
 #include <raylib.h>
 #include <filesystem>
 #include <image-compare.h>
+#include <filesystem.h>
 
 #define Verify(fn)  _Verify(fn, OnFailure(__FILE__, __LINE__ - 1))
 
@@ -15,23 +16,6 @@ static inline std::function<void(std::string, std::string)> OnFailure(const char
   return [=](std::string message, std::string url) {
     throw cest::AssertionError(file, line, message + ". Uploaded video to " + url);
   };
-}
-
-bool FileExists(const std::string& path_name) {
-  return std::filesystem::exists(path_name) && std::filesystem::is_regular_file(path_name);
-}
-
-std::string ReadFile(const std::string& path_name) {
-  std::ifstream file(path_name);
-  std::stringstream buffer;
-
-  buffer << file.rdbuf();
-
-  return buffer.str();
-}
-
-void RemoveFile(const std::string& path_name) {
-  std::filesystem::remove(path_name);
 }
 
 std::string NewFrameFilename(int frame)

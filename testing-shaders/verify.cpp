@@ -7,7 +7,8 @@ extern "C"
 #include <filesystem>
 #include <fstream>
 #include <functional>
-#include "image-compare.h"
+#include <image-compare.h>
+#include <filesystem.h>
 
 std::string GenerateVerifierFileName(const std::string& input) {
   std::stringstream ss(input);
@@ -25,23 +26,6 @@ std::string GenerateVerifierFileName(const std::string& input) {
   }
 
   return result;
-}
-
-bool FileExists(const std::string& path_name) {
-  return std::filesystem::exists(path_name) && std::filesystem::is_regular_file(path_name);
-}
-
-void RemoveFile(const std::string& path_name) {
-  std::filesystem::remove(path_name);
-}
-
-std::string ReadFile(const std::string& path_name) {
-  std::ifstream file(path_name);
-  std::stringstream buffer;
-
-  buffer << file.rdbuf();
-
-  return buffer.str();
 }
 
 void VerifyImages(const std::string& test_case_name, std::function<void(std::string)> on_failure)
