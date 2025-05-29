@@ -1,5 +1,6 @@
-#include "game.h"
-#include "platform.h"
+#include <game.h>
+#include <platform.h>
+#include <constants.h>
 #include <vector>
 #include <string>
 #include <cstdlib>
@@ -62,7 +63,7 @@ Game::Game(bool headless_mode)
   SetTraceLogCallback(NullLog);
   InitWindow(800, 600, "Game");
 
-  auto target_fps = headless_mode ? 10 : GetMonitorRefreshRate(GetCurrentMonitor());
+  auto target_fps = headless_mode ? HEADLESS_MODE_TARGET_FPS : GetMonitorRefreshRate(GetCurrentMonitor());
   SetTargetFPS(target_fps);
 
   this->state.reset(new GameState(headless_mode));
@@ -132,7 +133,7 @@ void Game::DoFrame()
   auto state = this->state.get();
   state->frame_index++;
 
-  if (state->headless && state->frame_index % 4 == 0)
+  if (state->headless && state->frame_index % HEADLESS_MODE_FRAMESKIP == 0)
   {
     render(state);
   }

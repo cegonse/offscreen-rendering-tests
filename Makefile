@@ -8,6 +8,7 @@ integration-testing:
 	@g++ \
 		-Ilib \
 		-Llib \
+		-Iintegration-testing \
 		./integration-testing/game.cpp \
 		./integration-testing/platform-pc.cpp \
 		./integration-testing/main.cpp \
@@ -18,6 +19,7 @@ integration-testing:
 		-Ilib \
 		-Icommon \
 		-Llib \
+		-Iintegration-testing \
 		./integration-testing/game.cpp \
 		./integration-testing/platform-test.cpp \
 		./integration-testing/game.test.cpp \

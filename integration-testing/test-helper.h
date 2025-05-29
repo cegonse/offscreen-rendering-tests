@@ -6,11 +6,11 @@
 #include <filesystem>
 #include <image-compare.h>
 #include <filesystem.h>
+#include <constants.h>
 
 #define Verify(fn)  _Verify(fn, OnFailure(__FILE__, __LINE__ - 1))
 
 constexpr int NUM_FRAMES_TO_RENDER = 70;
-constexpr int FRAME_SKIP = 4;
 
 static inline std::function<void(std::string, std::string)> OnFailure(const char *file, int line) {
   return [=](std::string message, std::string url) {
@@ -30,7 +30,7 @@ std::string FrameFilename(int frame)
 
 void CleanUpNewFrames()
 {
-  for (int i=0; i<NUM_FRAMES_TO_RENDER; i+=FRAME_SKIP) {
+  for (int i=0; i<NUM_FRAMES_TO_RENDER; i+=HEADLESS_MODE_FRAMESKIP) {
     if (!FileExists(NewFrameFilename(i))) continue;
     RemoveFile(NewFrameFilename(i));
   }
