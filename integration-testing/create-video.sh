@@ -33,7 +33,7 @@ function upload_to_imgur() {
     echo $response > "./build/full_response"
 }
 
-rm "./build/video.webm"
+rm -rf "./build/video.webm"
 build_video_frames
 generate_video
 upload_to_imgur
