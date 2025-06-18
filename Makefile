@@ -6,6 +6,7 @@ clean:
 integration-testing:
 	@mkdir -p build
 	@g++ \
+		-g \
 		-Ilib \
 		-Llib \
 		-Iintegration-testing \
