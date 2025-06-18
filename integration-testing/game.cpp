@@ -133,10 +133,12 @@ void Game::DoFrame()
   auto state = this->state.get();
   state->frame_index++;
 
-  if (state->headless && state->frame_index % HEADLESS_MODE_FRAMESKIP == 0)
-  {
+  auto should_render = state->headless ? 
+    state->frame_index % HEADLESS_MODE_FRAMESKIP == 0 :
+    true;
+  
+  if (should_render)
     render(state);
-  }
 
   updateState(state);
 }
