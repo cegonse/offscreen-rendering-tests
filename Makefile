@@ -1,9 +1,9 @@
-all: testing-shaders http-api-rendering integration-testing
+all: testing-shaders http-api-rendering integration-testing game
 
 clean:
 	@rm -rf build
 
-integration-testing:
+game:
 	@mkdir -p build
 	@g++ \
 		-g \
@@ -15,6 +15,9 @@ integration-testing:
 		./integration-testing/main.cpp \
 		-lraylib \
 		-o ./build/game
+
+integration-testing: game
+	@mkdir -p build
 
 	@g++ \
 		-Ilib \
@@ -59,4 +62,4 @@ testing-shaders:
 		-o ./build/shader-test
 	@./build/shader-test
 
-.PHONY: all testing-shaders http-api-rendering integration-testing clean
+.PHONY: all testing-shaders http-api-rendering integration-testing clean game
