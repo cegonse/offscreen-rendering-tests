@@ -90,7 +90,7 @@ static void updateState(GameState *state)
   state->player.x += speed;
   state->player.y += state->player_y_speed;
 
-  if (Platform::JumpKeyPressed()) state->player_y_speed = -5.f;
+  //if (Platform::JumpKeyPressed()) state->player_y_speed = -5.f;
 
   auto player_out_of_vertical_bounds = state->player.y > 650 || state->player.x < -50;
   auto collision = false;
@@ -133,10 +133,10 @@ void Game::DoFrame()
   auto state = this->state.get();
   state->frame_index++;
 
-  auto should_render = state->headless ? 
+  auto should_render = state->headless ?
     state->frame_index % HEADLESS_MODE_FRAMESKIP == 0 :
     true;
-  
+
   if (should_render)
     render(state);
 
